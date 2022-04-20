@@ -27,39 +27,65 @@ public class AdjList {
 
         StdIn.setFile("adjlist.in");
         StdOut.setFile("adjlist.out");
-        test randomName = new test();
-        randomName.printSomething();
-
-        int totalNumberOfCourses = StdIn.readInt();
-        Curriculum whatever = new Curriculum(totalNumberOfCourses);
-        //CourseNode[] temp = new CourseNode[totalNumberOfCourses];
-        HashMap<String, ArrayList> courses = new HashMap<String, ArrayList>();
-
+        
+        int totalNumberOfCourses = Integer.parseInt(StdIn.readLine());
+        CourseNode[] allCourses = new CourseNode[totalNumberOfCourses];
         for(int i = 0; i < totalNumberOfCourses; i++){
-            CourseNode bruh = new CourseNode(StdIn.readString());
-            whatever.addCourse(bruh);
-            
-            //Todo: Keep the array, and have a marked attribute(boolean) in the class I want to make 
+            allCourses[i] = new CourseNode(StdIn.readLine());
         }
 
-        int numOfConnections = StdIn.readInt();
+        Curriculum curriculum = new Curriculum(allCourses, totalNumberOfCourses);
+        int numOfConnections = Integer.parseInt(StdIn.readLine());
+
+        //fills the queue
         Queue<String> temporary = new LinkedList<String>();
+        
         for(int i = 0; i < numOfConnections; i++){
             temporary.offer(StdIn.readLine());
         }
 
-        //* This might not be necessary 
+        //* Creates the curriculum
         while(!temporary.isEmpty()){
             String poppedString = temporary.poll();
-            String[] wut = poppedString.split(" ");
-            //String huh = wut[0];
+            String[] splitString = poppedString.split(" ");
+            CourseNode[] connections = new CourseNode[splitString.length];
+            for(int i = 0; i < splitString.length; i++){
+                connections[i] = new CourseNode(splitString[i]);
+            }
+            curriculum.createImmediatePrereq(connections);
         }
-        
+        printList(curriculum);
+
+        /* Plan:
+        1. for each class, create a course node with linked list attribuutes Check
+        2. put everything into the curriculum (just an array of courseNodes)    Check
+        3. When dealing with connections, I need to find the relationship of first index with second -> put as next of the linked list
+        4. Create the graph with the hashmap/set
+
+        */
+
         // if ( args.length < 2 ) {
         //     StdOut.println("Execute: java -cp bin prereqchecker.AdjList <adjacency list INput file> <adjacency list OUTput file>");
         //     return;
         // }
-
-	    System.out.println("test");
     }
+
+    public static void printList(Curriculum curriculum){
+        for(CourseNode n: curriculum.getCourseNodes()){
+            while(n != null){
+                if(n.getNext() == null){
+                    StdOut.print(n.getName());
+                    n = n.getNext();
+                }
+                else{
+                    StdOut.print(n.getName() + " ");
+                    n = n.getNext();
+                }
+            }
+            StdOut.println();
+        }
+    }
+
+     
+    
 }
