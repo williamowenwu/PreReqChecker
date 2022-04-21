@@ -2,7 +2,9 @@ package prereqchecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -25,16 +27,36 @@ import java.util.Queue;
 public class AdjList {
     public static void main(String[] args) {
 
-        StdIn.setFile("adjlist.in");
-        StdOut.setFile("adjlist.out");
-        
+        String inFile = "adjlist.in";
+        String outFile = "adjlist.out";
+        Curriculum curr = createCurr(inFile);
+        StdOut.setFile(outFile);
+        printList(curr);
+
+
+        /* Plan:
+        1. for each class, create a course node with linked list attribuutes Check
+        2. put everything into the curriculum (just an array of courseNodes)    Check
+        3. When dealing with connections, I need to find the relationship of first index with second -> put as next of the linked list
+        4. Create the graph with the hashmap/set
+
+        */
+
+        // if ( args.length < 2 ) {
+        //     StdOut.println("Execute: java -cp bin prereqchecker.AdjList <adjacency list INput file> <adjacency list OUTput file>");
+        //     return;
+        // }
+    }
+    public static Curriculum createCurr(String inFile){
+        StdIn.setFile(inFile);
+
         int totalNumberOfCourses = Integer.parseInt(StdIn.readLine());
         CourseNode[] allCourses = new CourseNode[totalNumberOfCourses];
         for(int i = 0; i < totalNumberOfCourses; i++){
             allCourses[i] = new CourseNode(StdIn.readLine());
         }
 
-        Curriculum curriculum = new Curriculum(allCourses, totalNumberOfCourses);
+        Curriculum curriculum = new Curriculum(allCourses);
         int numOfConnections = Integer.parseInt(StdIn.readLine());
 
         //fills the queue
@@ -54,33 +76,18 @@ public class AdjList {
             }
             curriculum.createImmediatePrereq(connections);
         }
-        printList(curriculum);
-
-        /* Plan:
-        1. for each class, create a course node with linked list attribuutes Check
-        2. put everything into the curriculum (just an array of courseNodes)    Check
-        3. When dealing with connections, I need to find the relationship of first index with second -> put as next of the linked list
-        4. Create the graph with the hashmap/set
-
-        */
-
-        // if ( args.length < 2 ) {
-        //     StdOut.println("Execute: java -cp bin prereqchecker.AdjList <adjacency list INput file> <adjacency list OUTput file>");
-        //     return;
-        // }
+        return curriculum;
     }
 
+
     public static void printList(Curriculum curriculum){
-        for(CourseNode n: curriculum.getCourseNodes()){
-            while(n != null){
-                if(n.getNext() == null){
-                    StdOut.print(n.getName());
-                    n = n.getNext();
-                }
-                else{
-                    StdOut.print(n.getName() + " ");
-                    n = n.getNext();
-                }
+        Map<String, ArrayList<CourseNode>> map = curriculum.getMap();
+        Iterator it = map.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry pair = (Map.Entry)it.next();
+            StdOut.print(pair.getKey() + " ");
+            for(CourseNode prereq: map.get(pair.getKey())){
+                StdOut.print(prereq.getName() + " ");
             }
             StdOut.println();
         }

@@ -34,15 +34,10 @@ public class CourseNode {
 
 
     public CourseNode getNext() {return next;}
-
     public CourseNode getLastCourseNode() {return lastNode;}
-
     public int getArrayIndex(){return arrayIndex;}
-
     public ArrayList<CourseNode> getAdjEdges() {return AdjEdges;}
-
     public String getName() {return name;}
-
     public boolean getMarked() {return marked;}
 
 }

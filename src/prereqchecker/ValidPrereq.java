@@ -1,7 +1,10 @@
 package prereqchecker;
 
-import java.util.Currency;
+import java.util.ArrayList;
+//import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -32,14 +35,15 @@ public class ValidPrereq {
         String outFile = "validprereq.out";
         String prereqFile = "validprereq.in";
 
+
+        StdOut.setFile(outFile);
         Curriculum curr = createCurr(inFile);
         // cs417
         // cs111
-        DegreeNavigator nav = new DegreeNavigator(curr);
+         DegreeNavigator nav = new DegreeNavigator(curr);
         StdOut.setFile(outFile);
         StdOut.print(nav.isValidPrereq(prereqFile));
-        // StdOut.print(curr.getConnectedVertices(nodeThing));
-        
+        //printList(curr);
 
 
         // if ( args.length < 3 ) {
@@ -60,7 +64,7 @@ public class ValidPrereq {
             allCourses[i] = new CourseNode(StdIn.readLine());
         }
 
-        Curriculum curriculum = new Curriculum(allCourses, totalNumberOfCourses);
+        Curriculum curriculum = new Curriculum(allCourses);
         int numOfConnections = Integer.parseInt(StdIn.readLine());
 
         //fills the queue
@@ -89,5 +93,18 @@ public class ValidPrereq {
         String potentialPrereq = StdIn.readLine();
 
 
+    }
+    
+    public static void printList(Curriculum curriculum){
+        Map<String, ArrayList<CourseNode>> map = curriculum.getMap();
+        Iterator it = map.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry pair = (Map.Entry)it.next();
+            StdOut.print(pair.getKey() + " ");
+            for(CourseNode prereq: map.get(pair.getKey())){
+                StdOut.print(prereq.getName() + " ");
+            }
+            StdOut.println();
+        }
     }
 }

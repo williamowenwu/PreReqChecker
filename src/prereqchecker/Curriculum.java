@@ -13,7 +13,7 @@ public class Curriculum {
     private int arrayIndex;
     private CourseNode[] adj;
     private HashSet<CourseNode> courses;
-    private HashMap<CourseNode, ArrayList<CourseNode>> list;
+    private HashMap<String, ArrayList<CourseNode>> list;
     private ArrayList<CourseNode> immediatePrereq;
 
     public Curriculum(CourseNode[] allCourses, int sizeOfCourses){
@@ -23,16 +23,17 @@ public class Curriculum {
         for(int i = 0; i < sizeOfArray; i++){
             courseNodes[i] = allCourses[i];
             courseNodes[i].setArrayIndex(i);
-            //this.courses.add(allCourses[i]);
-            //this.list.put(allCourses[i], null);
         }
         
     }
 
     public Curriculum(CourseNode[] allCourseNodes){
         this.courseNodes = allCourseNodes;
+        this.list = new HashMap<String, ArrayList<CourseNode>>();
         for(int i = 0; i <allCourseNodes.length; i++){
-            this.list.put(allCourseNodes[i], new ArrayList<CourseNode>());
+            ArrayList<CourseNode> AL = new ArrayList<CourseNode>();
+            this.list.put(allCourseNodes[i].getName(), AL);
+            this.immediatePrereq = new ArrayList<CourseNode>();
         }   
     }
     
@@ -45,22 +46,8 @@ public class Curriculum {
     public void createImmediatePrereq(CourseNode[] prereqs){
         CourseNode course = prereqs[0];
         CourseNode prereq = prereqs[1];
-
-        for(int i = 0; i < list.size();i++){
-            if(course.getName().equals(courseNodes[i].getName())){
-                if(courseNodes[i].getNext() != null){
-                    //list.get(course).add(prereq);
-                    courseNodes[i].getLastCourseNode().setNext(prereq);
-                    courseNodes[i].updateAdjEdges(prereq);
-                    break;
-                }
-                else{
-                    courseNodes[i].setNext(prereq);
-                    courseNodes[i].updateAdjEdges(prereq);
-                    break;
-                }
-            }
-        }
+        this.list.get(course.getName()).add(prereq);
+        immediatePrereq.add(prereq);
 
     }
 
@@ -68,23 +55,12 @@ public class Curriculum {
     public CourseNode[] getCourseNodes() {return courseNodes;}
     public int getCurrentSize() {return currentSize;}
     public int getSizeOfArray() {return sizeOfArray;}
+    public ArrayList<CourseNode> getAdj() {return immediatePrereq;}
+    public HashMap<String, ArrayList<CourseNode>> getMap() {return list;}
+    public ArrayList<CourseNode> getPrereq(String key) {
+        return list.get(key);
+    }
 
-   
-
-    // public int getConnectedVertices(CourseNode start){
-    //     CourseNode tracker = start.getNext();
-    //     if(tracker == null) {
-    //         int index = start.getArrayIndex();
-    //         if(courseNodes[index].getName().equals(start.getName())) {return 0;}
-    //         return 1 + getConnectedVertices(courseNodes[index]);
-            
-    //     }
-    //     getConnectedVertices(start.getNext());
-    //     ArrayList<Boolean> hwat = new ArrayList<Boolean>();
-    //     hwat.add(false);
-    //     boolean huh = hwat.get(0);
-    //     hwat.set(0, true);
-    //     return 1;
         
 
     //}

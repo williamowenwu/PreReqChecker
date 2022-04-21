@@ -35,16 +35,16 @@ public class DegreeNavigator {
 
         for(CourseNode node: nodes){
             if(node.getName().equals(course)){
-                int start = node.getArrayIndex();
-                search = new DFS(curr, start, node); 
+                //int start = node.getArrayIndex();
+                search = new DFS(curr,node.getName()); 
                 break;
             }
             if(node.getName().equals(potentialPrereq)){
                 prereq = node;
             }
         }
-        boolean contain; 
-        return contain = (search.getVisited().contains(prereq)) ? true : false;
+        return search.getVisited(potentialPrereq);
+
     }
 
     
