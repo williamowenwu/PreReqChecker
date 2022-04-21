@@ -26,7 +26,7 @@ public class DegreeNavigator {
         StdOut.print(StdIn.readAll());
     }
 
-    public boolean isValidPrereq(String fileName){
+    public String isValidPrereq(String fileName){
         StdIn.setFile(fileName);
         String course = StdIn.readLine();
         String potentialPrereq = StdIn.readLine();
@@ -43,7 +43,8 @@ public class DegreeNavigator {
                 prereq = node;
             }
         }
-        return search.getVisited(potentialPrereq);
+        String answer = (search.getVisited(potentialPrereq)) ? "YES" : "NO";
+        return answer; 
 
     }
 

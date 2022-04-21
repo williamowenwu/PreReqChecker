@@ -27,12 +27,61 @@ import java.util.*;
  */
 public class Eligible {
     public static void main(String[] args) {
+        String inFile = "adjlist.in";
+        String outFile = "validprereq.out";
+        String eligibleFile = "eligible.in";
 
-        if ( args.length < 3 ) {
-            StdOut.println("Execute: java -cp bin prereqchecker.Eligible <adjacency list INput file> <eligible INput file> <eligible OUTput file>");
-            return;
+        Curriculum curr = createCurr(inFile);
+
+        // if ( args.length < 3 ) {
+        //     StdOut.println("Execute: java -cp bin prereqchecker.Eligible <adjacency list INput file> <eligible INput file> <eligible OUTput file>");
+        //     return;
+        // }
+
+	
+    }
+    public static Curriculum createCurr(String inFile){
+        StdIn.setFile(inFile);
+
+        int totalNumberOfCourses = Integer.parseInt(StdIn.readLine());
+        CourseNode[] allCourses = new CourseNode[totalNumberOfCourses];
+        for(int i = 0; i < totalNumberOfCourses; i++){
+            allCourses[i] = new CourseNode(StdIn.readLine());
         }
 
-	// WRITE YOUR CODE HERE
+        Curriculum curriculum = new Curriculum(allCourses);
+        int numOfConnections = Integer.parseInt(StdIn.readLine());
+
+        //fills the queue
+        Queue<String> temporary = new LinkedList<String>();
+        
+        for(int i = 0; i < numOfConnections; i++){
+            temporary.offer(StdIn.readLine());
+        }
+
+        //* Creates the curriculum
+        while(!temporary.isEmpty()){
+            String poppedString = temporary.poll();
+            String[] splitString = poppedString.split(" ");
+            CourseNode[] connections = new CourseNode[splitString.length];
+            for(int i = 0; i < splitString.length; i++){
+                connections[i] = new CourseNode(splitString[i]);
+            }
+            curriculum.createImmediatePrereq(connections);
+        }
+        return curriculum;
+    }
+
+    public static void printList(Curriculum curriculum){
+        Map<String, ArrayList<CourseNode>> map = curriculum.getMap();
+        Iterator it = map.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry pair = (Map.Entry)it.next();
+            StdOut.print(pair.getKey() + " ");
+            for(CourseNode prereq: map.get(pair.getKey())){
+                StdOut.print(prereq.getName() + " ");
+            }
+            StdOut.println();
+        }
     }
 }
