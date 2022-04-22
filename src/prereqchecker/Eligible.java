@@ -28,10 +28,17 @@ import java.util.*;
 public class Eligible {
     public static void main(String[] args) {
         String inFile = "adjlist.in";
-        String outFile = "validprereq.out";
+        String outFile = "eligible.out";
         String eligibleFile = "eligible.in";
 
+        StdOut.setFile(outFile);
         Curriculum curr = createCurr(inFile);
+        DegreeNavigator nav = new DegreeNavigator(curr);
+        HashSet<CourseNode> eligibleCourses = nav.eligibleFor(eligibleFile);
+
+        for(CourseNode n: eligibleCourses){
+            StdOut.println(n.getName());
+        }
 
         // if ( args.length < 3 ) {
         //     StdOut.println("Execute: java -cp bin prereqchecker.Eligible <adjacency list INput file> <eligible INput file> <eligible OUTput file>");
@@ -42,7 +49,6 @@ public class Eligible {
     }
     public static Curriculum createCurr(String inFile){
         StdIn.setFile(inFile);
-
         int totalNumberOfCourses = Integer.parseInt(StdIn.readLine());
         CourseNode[] allCourses = new CourseNode[totalNumberOfCourses];
         for(int i = 0; i < totalNumberOfCourses; i++){
@@ -50,25 +56,7 @@ public class Eligible {
         }
 
         Curriculum curriculum = new Curriculum(allCourses);
-        int numOfConnections = Integer.parseInt(StdIn.readLine());
-
-        //fills the queue
-        Queue<String> temporary = new LinkedList<String>();
-        
-        for(int i = 0; i < numOfConnections; i++){
-            temporary.offer(StdIn.readLine());
-        }
-
-        //* Creates the curriculum
-        while(!temporary.isEmpty()){
-            String poppedString = temporary.poll();
-            String[] splitString = poppedString.split(" ");
-            CourseNode[] connections = new CourseNode[splitString.length];
-            for(int i = 0; i < splitString.length; i++){
-                connections[i] = new CourseNode(splitString[i]);
-            }
-            curriculum.createImmediatePrereq(connections);
-        }
+        curriculum.createImmediatePrereq(inFile);
         return curriculum;
     }
 

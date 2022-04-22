@@ -1,5 +1,6 @@
 package prereqchecker;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -35,8 +36,7 @@ public class DegreeNavigator {
 
         for(CourseNode node: nodes){
             if(node.getName().equals(course)){
-                //int start = node.getArrayIndex();
-                search = new DFS(curr,node.getName()); 
+                search = new DFS(curr,node); 
                 break;
             }
             if(node.getName().equals(potentialPrereq)){
@@ -45,7 +45,37 @@ public class DegreeNavigator {
         }
         String answer = (search.getVisited(potentialPrereq)) ? "YES" : "NO";
         return answer; 
+    }
 
+    public HashSet<CourseNode> eligibleFor(String fileName){
+        StdIn.setFile(fileName);
+        int numOfTakenCourses = Integer.parseInt(StdIn.readLine());
+        HashSet<CourseNode> takenCourses = new HashSet<>();
+        HashSet<String> completedCourses = new HashSet<>();
+        HashSet<CourseNode> eligibleCourses = new HashSet<>();
+        for(int i = 0; i < numOfTakenCourses; i++){
+            CourseNode n = new CourseNode(StdIn.readLine());
+            takenCourses.add(n);
+        }
+        
+        for(CourseNode n: takenCourses){
+            DFS traverse = new DFS(curr, n);
+            for(String node : traverse.getCompletedCourses()){
+                completedCourses.add(node);
+            }
+        }
+        
+        for(CourseNode courseName: curr.getCourseNodes()){
+            if(!completedCourses.contains(courseName.getName())){
+                if(completedCourses.containsAll(courseName.getImmediatePrereqs())){
+                    eligibleCourses.add(courseName);
+                }
+            }
+        }
+        return eligibleCourses;
+        // if you did not take the course
+            // if it satisfies the required course
+                // add it as a eligible course
     }
 
     

@@ -26,12 +26,13 @@ public class Curriculum {
         }
         
     }
-
     public Curriculum(CourseNode[] allCourseNodes){
-        this.courseNodes = allCourseNodes;
         this.list = new HashMap<String, ArrayList<CourseNode>>();
+        this.courseNodes = new CourseNode[allCourseNodes.length];
         for(int i = 0; i <allCourseNodes.length; i++){
             ArrayList<CourseNode> AL = new ArrayList<CourseNode>();
+            this.courseNodes[i] = allCourseNodes[i];
+            this.courseNodes[i].setArrayIndex(i);
             this.list.put(allCourseNodes[i].getName(), AL);
             this.immediatePrereq = new ArrayList<CourseNode>();
         }   
@@ -46,10 +47,50 @@ public class Curriculum {
     public void createImmediatePrereq(CourseNode[] prereqs){
         CourseNode course = prereqs[0];
         CourseNode prereq = prereqs[1];
+        //int index = course.getArrayIndex();
         this.list.get(course.getName()).add(prereq);
+        course.setPrereq(prereq);
         immediatePrereq.add(prereq);
 
     }
+
+    public void createImmediatePrereq(String inFile){
+        StdIn.setFile(inFile);
+        int whatever = Integer.parseInt(StdIn.readLine());
+        for(int i = 0; i < whatever; i++){
+            StdIn.readLine();
+        }
+        
+        Queue<String> temporary = new LinkedList<String>();
+        int numberOfPrereq = Integer.parseInt(StdIn.readLine());
+
+        for(int i = 0; i < numberOfPrereq; i++){
+            temporary.offer(StdIn.readLine());
+        }
+        while(!temporary.isEmpty()){
+            String poppedString = temporary.poll();
+            String[] splitString = poppedString.split(" ");
+            String courseName = splitString[0];
+            String prereqName = splitString[1];
+            int courseIndex = 0;
+            int prereqIndex = 0;
+
+            for(CourseNode n: courseNodes){
+                if(n.getName().equals(courseName)){
+                    courseIndex = n.getArrayIndex();
+                }
+                else if(n.getName().equals(prereqName)){
+                    prereqIndex = n.getArrayIndex();
+                }
+            }
+            CourseNode course = courseNodes[courseIndex];
+            CourseNode prereq = courseNodes[prereqIndex];
+
+            this.list.get(course.getName()).add(prereq);
+            course.setPrereq(prereq);;
+        }
+    }
+
 
 
     public CourseNode[] getCourseNodes() {return courseNodes;}

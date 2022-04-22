@@ -1,6 +1,7 @@
 package prereqchecker;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class CourseNode {
     private String name;
@@ -9,11 +10,16 @@ public class CourseNode {
     private CourseNode lastNode;
     private int arrayIndex;
     private ArrayList<CourseNode> AdjEdges;
+    private HashSet<String> Prereq;
 
     public CourseNode(String name){
         this.name = name;
         this.marked = false;
         this.next = null;
+        this.Prereq = new HashSet<String>();
+        // for(CourseNode n: prereqs){
+        //     this.Prereq.add(n);
+        // }
         this.AdjEdges = new ArrayList<CourseNode>();
     }
     public CourseNode(){
@@ -24,6 +30,10 @@ public class CourseNode {
         this.next = n;
         lastNode = n;
     }
+    public void setPrereq(CourseNode n){
+        this.Prereq.add(n.getName());
+    }
+
 
     public void setArrayIndex(int index) {
         this.arrayIndex = index;
@@ -39,5 +49,6 @@ public class CourseNode {
     public ArrayList<CourseNode> getAdjEdges() {return AdjEdges;}
     public String getName() {return name;}
     public boolean getMarked() {return marked;}
+    public HashSet<String> getImmediatePrereqs() {return Prereq;}
 
 }
