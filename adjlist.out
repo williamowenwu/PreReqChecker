@@ -14,10 +14,10 @@ cs452 cs344
 cs210 cs111 
 cs112 cs111 mat151 
 cs211 cs112 
-cs344 cs206 cs112 
+cs344 cs112 cs206 
 cs213 cs112 
 cs323 mat250 
 cs214 cs211 
-cs314 cs211 cs205 
+cs314 cs205 cs211 
 cs336 cs112 cs205 
 cs205 cs111 mat152 

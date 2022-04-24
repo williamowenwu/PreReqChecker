@@ -1,11 +1,9 @@
 package prereqchecker;
 
-import java.util.ArrayList;
-//import java.util.HashMap;
+import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  * Steps to implement this class main method:
@@ -31,33 +29,55 @@ import java.util.Queue;
  */
 public class ValidPrereq {
     public static void main(String[] args) {
-        String inFile = "adjlist.in";
-        String outFile = "validprereq.out";
-        String prereqFile = "validprereq.in";
+        String inFile = " ";
+        String outFile = " ";
+        String specialFile = " ";
+        int input = -1;
+        StdOut.println("Hardcode or CustomInput?");
+        StdOut.println("1. Hardcode \n2. Everything \n3. Special File Only");
+        StdOut.print("=> ");
+        while(true){
+            try {
+                input = StdIn.readInt();
+                break;
+            } catch(InputMismatchException misMatch) {
+                StdOut.println("Input must be a number");
+                StdOut.print("=> ");
+            }
+        }
 
+        switch(input){
+            case 1:
+                inFile = "adjlist.in";
+                outFile = "validprereq.out";
+                specialFile = "validprereq.in";
+                break;
+            
+            case 2: 
+                StdOut.println("Input File: ");
+                inFile = StdIn.readString();
+                StdOut.println("Output File: ");
+                outFile = StdIn.readString();
+                StdOut.println("Special File: ");
+                specialFile = StdIn.readString();
+                break;
+            
+            case 3:
+                inFile = "adjlist.in";
+                outFile = "validprereq.out";
+                StdOut.println("Special File: ");
+                specialFile = StdIn.readString();
+                break;
+        }
 
         StdOut.setFile(outFile);
         Curriculum curr = createCurr(inFile);
-        // cs417
-        // cs111
-         DegreeNavigator nav = new DegreeNavigator(curr);
-        StdOut.setFile(outFile);
-        StdOut.print(nav.isValidPrereq(prereqFile));
-        //printList(curr);
-
-
-        // if ( args.length < 3 ) {
-        //     StdOut.println("Execute: java -cp bin prereqchecker.ValidPrereq <adjacency list INput file> <valid prereq INput file> <valid prereq OUTput file>");
-        //     return;
-        // }
-
-        //DegreeNavigator nav = new DegreeNavigator(curriculum);
-        
+        DegreeNavigator nav = new DegreeNavigator(curr);
+        StdOut.print(nav.isValidPrereq(specialFile));
     }
 
     public static Curriculum createCurr(String inFile){
         StdIn.setFile(inFile);
-
         int totalNumberOfCourses = Integer.parseInt(StdIn.readLine());
         CourseNode[] allCourses = new CourseNode[totalNumberOfCourses];
         for(int i = 0; i < totalNumberOfCourses; i++){
@@ -65,38 +85,12 @@ public class ValidPrereq {
         }
 
         Curriculum curriculum = new Curriculum(allCourses);
-        int numOfConnections = Integer.parseInt(StdIn.readLine());
-
-        //fills the queue
-        Queue<String> temporary = new LinkedList<String>();
-        
-        for(int i = 0; i < numOfConnections; i++){
-            temporary.offer(StdIn.readLine());
-        }
-
-        //* Creates the curriculum
-        while(!temporary.isEmpty()){
-            String poppedString = temporary.poll();
-            String[] splitString = poppedString.split(" ");
-            CourseNode[] connections = new CourseNode[splitString.length];
-            for(int i = 0; i < splitString.length; i++){
-                connections[i] = new CourseNode(splitString[i]);
-            }
-            curriculum.createImmediatePrereq(connections);
-        }
+        curriculum.createImmediatePrereq(inFile);
         return curriculum;
     }
 
-    public static void isValidPrereq(String fileName){
-        StdIn.setFile(fileName);
-        String course = StdIn.readLine();
-        String potentialPrereq = StdIn.readLine();
-
-
-    }
-    
     public static void printList(Curriculum curriculum){
-        Map<String, ArrayList<CourseNode>> map = curriculum.getMap();
+        Map<String, HashSet<CourseNode>> map = curriculum.getMap();
         Iterator it = map.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry pair = (Map.Entry)it.next();

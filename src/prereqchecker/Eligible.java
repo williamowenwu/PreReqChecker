@@ -61,7 +61,7 @@ public class Eligible {
     }
 
     public static void printList(Curriculum curriculum){
-        Map<String, ArrayList<CourseNode>> map = curriculum.getMap();
+        Map<String, HashSet<CourseNode>> map = curriculum.getMap();
         Iterator it = map.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry pair = (Map.Entry)it.next();

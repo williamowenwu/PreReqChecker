@@ -1,11 +1,9 @@
 package prereqchecker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  * Steps to implement this class main method:
@@ -26,30 +24,43 @@ import java.util.Queue;
  */
 public class AdjList {
     public static void main(String[] args) {
+        String inFile = " ";
+        String outFile = " ";
+        int input = -1;
+        StdOut.println("Hardcode or CustomInput?");
+        StdOut.println("1. Hardcode \n2. Everything");
+        StdOut.print("=> ");
+        while(true){
+            try {
+                input = StdIn.readInt();
+                break;
+            } catch(InputMismatchException misMatch) {
+                StdOut.println("Input must be a number");
+                StdOut.print("=> ");
+            }
+        }
 
-        String inFile = "adjlist.in";
-        String outFile = "adjlist.out";
+        switch(input){
+            case 1:
+                inFile = "adjlist.in";
+                outFile = "adjlist.out";
+                break;
+            
+            case 2: 
+                StdOut.println("Input File: ");
+                inFile = StdIn.readString();
+                StdOut.println("Output File: ");
+                outFile = StdIn.readString();
+                break;
+        }
+
         Curriculum curr = createCurr(inFile);
         StdOut.setFile(outFile);
-        printList(curr);
+        printMap(curr);
 
-
-        /* Plan:
-        1. for each class, create a course node with linked list attribuutes Check
-        2. put everything into the curriculum (just an array of courseNodes)    Check
-        3. When dealing with connections, I need to find the relationship of first index with second -> put as next of the linked list
-        4. Create the graph with the hashmap/set
-
-        */
-
-        // if ( args.length < 2 ) {
-        //     StdOut.println("Execute: java -cp bin prereqchecker.AdjList <adjacency list INput file> <adjacency list OUTput file>");
-        //     return;
-        // }
     }
     public static Curriculum createCurr(String inFile){
         StdIn.setFile(inFile);
-
         int totalNumberOfCourses = Integer.parseInt(StdIn.readLine());
         CourseNode[] allCourses = new CourseNode[totalNumberOfCourses];
         for(int i = 0; i < totalNumberOfCourses; i++){
@@ -57,31 +68,12 @@ public class AdjList {
         }
 
         Curriculum curriculum = new Curriculum(allCourses);
-        int numOfConnections = Integer.parseInt(StdIn.readLine());
-
-        //fills the queue
-        Queue<String> temporary = new LinkedList<String>();
-        
-        for(int i = 0; i < numOfConnections; i++){
-            temporary.offer(StdIn.readLine());
-        }
-
-        //* Creates the curriculum
-        while(!temporary.isEmpty()){
-            String poppedString = temporary.poll();
-            String[] splitString = poppedString.split(" ");
-            CourseNode[] connections = new CourseNode[splitString.length];
-            for(int i = 0; i < splitString.length; i++){
-                connections[i] = new CourseNode(splitString[i]);
-            }
-            curriculum.createImmediatePrereq(connections);
-        }
+        curriculum.createImmediatePrereq(inFile);
         return curriculum;
     }
 
-
-    public static void printList(Curriculum curriculum){
-        Map<String, ArrayList<CourseNode>> map = curriculum.getMap();
+    public static void printMap(Curriculum curriculum){
+        Map<String, HashSet<CourseNode>> map = curriculum.getMap();
         Iterator it = map.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry pair = (Map.Entry)it.next();

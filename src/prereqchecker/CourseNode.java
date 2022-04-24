@@ -1,54 +1,33 @@
 package prereqchecker;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class CourseNode {
     private String name;
-    private boolean marked;
-    private CourseNode next;
-    private CourseNode lastNode;
     private int arrayIndex;
-    private ArrayList<CourseNode> AdjEdges;
-    private HashSet<String> Prereq;
+    private HashSet<CourseNode> PrereqNodes; //CourseNode Version of the CourseID
+    private HashSet<String> Prereq; // Just the name of the CourseID
 
     public CourseNode(String name){
         this.name = name;
-        this.marked = false;
-        this.next = null;
-        this.Prereq = new HashSet<String>();
-        // for(CourseNode n: prereqs){
-        //     this.Prereq.add(n);
-        // }
-        this.AdjEdges = new ArrayList<CourseNode>();
-    }
-    public CourseNode(){
-        
+        this.Prereq = new HashSet<>();
+        this.PrereqNodes = new HashSet<>();;
     }
 
-    public void setNext(CourseNode n) {
-        this.next = n;
-        lastNode = n;
-    }
     public void setPrereq(CourseNode n){
         this.Prereq.add(n.getName());
     }
 
-
     public void setArrayIndex(int index) {
         this.arrayIndex = index;
     }
-    public void updateAdjEdges(CourseNode course){
-        this.AdjEdges.add(course);
+    public void setPrereqNodes(CourseNode course){
+        this.PrereqNodes.add(course);
     }
 
-
-    public CourseNode getNext() {return next;}
-    public CourseNode getLastCourseNode() {return lastNode;}
     public int getArrayIndex(){return arrayIndex;}
-    public ArrayList<CourseNode> getAdjEdges() {return AdjEdges;}
+    public HashSet<CourseNode> getPrereqNodes() {return PrereqNodes;}
     public String getName() {return name;}
-    public boolean getMarked() {return marked;}
-    public HashSet<String> getImmediatePrereqs() {return Prereq;}
+    public HashSet<String> getPrereqs() {return Prereq;}
 
 }
