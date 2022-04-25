@@ -1,6 +1,5 @@
 package prereqchecker;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,26 +11,14 @@ public class Curriculum{
     private int sizeOfArray;
     private HashMap<String, HashSet<CourseNode>> list;
 
-    // public Curriculum(CourseNode[] allCourses, int sizeOfCourses){
-    //     this.sizeOfArray = sizeOfCourses;
-    //     this.courseNodes = new CourseNode[sizeOfArray];
-    //     this.currentSize = 0;
-    //     for(int i = 0; i < sizeOfArray; i++){
-    //         courseNodes[i] = allCourses[i];
-    //         courseNodes[i].setArrayIndex(i);
-    //     }
-        
-    // }
     public Curriculum(CourseNode[] allCourseNodes){
         this.list = new HashMap<String, HashSet<CourseNode>>();
         this.courseNodes = new CourseNode[allCourseNodes.length];
         for(int i = 0; i <allCourseNodes.length; i++){
-            ArrayList<CourseNode> AL = new ArrayList<CourseNode>();
             HashSet<CourseNode> hs = new HashSet<>();
             this.courseNodes[i] = allCourseNodes[i];
             this.courseNodes[i].setArrayIndex(i);
             this.list.put(allCourseNodes[i].getName(), hs);
-            // this.immediatePrereq = new ArrayList<CourseNode>();
         }
     }
 
@@ -86,7 +73,6 @@ public class Curriculum{
     public CourseNode[] getCourseNodes() {return courseNodes;}
     public int getCurrentSize() {return currentSize;}
     public int getSizeOfArray() {return sizeOfArray;}
-    // public ArrayList<CourseNode> getAdj() {return immediatePrereq;}
     public HashMap<String, HashSet<CourseNode>> getMap() {return list;}
     public HashSet<CourseNode> getPrereq(String key) {return list.get(key);}
 
