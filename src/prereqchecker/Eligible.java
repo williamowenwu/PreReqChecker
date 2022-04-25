@@ -27,14 +27,51 @@ import java.util.*;
  */
 public class Eligible {
     public static void main(String[] args) {
-        String inFile = "adjlist.in";
-        String outFile = "eligible.out";
-        String eligibleFile = "eligible.in";
+        String inFile = " ";
+        String outFile = " ";
+        String specialFile = " ";
+        int input = -1;
+        StdOut.println("Hardcode or CustomInput?");
+        StdOut.println("1. Hardcode \n2. Everything \n3. Special File Only");
+        StdOut.print("=> ");
+        while(true){
+            try {
+                input = StdIn.readInt();
+                break;
+            } catch(InputMismatchException misMatch) {
+                StdOut.println("Input must be a number");
+                StdOut.print("=> ");
+            }
+        }
+
+        switch(input){
+            case 1:
+                inFile = "adjlist.in";
+                outFile = "eligible.out";
+                specialFile = "eligible.in";
+                break;
+            
+            case 2: 
+                StdOut.println("Input File: ");
+                inFile = StdIn.readString();
+                StdOut.println("Output File: ");
+                outFile = StdIn.readString();
+                StdOut.println("Special File: ");
+                specialFile = StdIn.readString();
+                break;
+            
+            case 3:
+                inFile = "adjlist.in";
+                outFile = "eligible.out";
+                StdOut.println("Special File: ");
+                specialFile = StdIn.readString();
+                break;
+        }
 
         StdOut.setFile(outFile);
         Curriculum curr = createCurr(inFile);
         DegreeNavigator nav = new DegreeNavigator(curr);
-        HashSet<CourseNode> eligibleCourses = nav.eligibleFor(eligibleFile);
+        HashSet<CourseNode> eligibleCourses = nav.eligibleFor(specialFile);
 
         for(CourseNode n: eligibleCourses){
             StdOut.println(n.getName());
