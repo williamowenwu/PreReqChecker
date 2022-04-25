@@ -10,20 +10,18 @@ public class Curriculum{
     private CourseNode[] courseNodes; 
     private int currentSize; 
     private int sizeOfArray;
-    // private HashSet<CourseNode> courses;
     private HashMap<String, HashSet<CourseNode>> list;
-    // private ArrayList<CourseNode> immediatePrereq;
 
-    public Curriculum(CourseNode[] allCourses, int sizeOfCourses){
-        this.sizeOfArray = sizeOfCourses;
-        this.courseNodes = new CourseNode[sizeOfArray];
-        this.currentSize = 0;
-        for(int i = 0; i < sizeOfArray; i++){
-            courseNodes[i] = allCourses[i];
-            courseNodes[i].setArrayIndex(i);
-        }
+    // public Curriculum(CourseNode[] allCourses, int sizeOfCourses){
+    //     this.sizeOfArray = sizeOfCourses;
+    //     this.courseNodes = new CourseNode[sizeOfArray];
+    //     this.currentSize = 0;
+    //     for(int i = 0; i < sizeOfArray; i++){
+    //         courseNodes[i] = allCourses[i];
+    //         courseNodes[i].setArrayIndex(i);
+    //     }
         
-    }
+    // }
     public Curriculum(CourseNode[] allCourseNodes){
         this.list = new HashMap<String, HashSet<CourseNode>>();
         this.courseNodes = new CourseNode[allCourseNodes.length];
@@ -36,21 +34,6 @@ public class Curriculum{
             // this.immediatePrereq = new ArrayList<CourseNode>();
         }
     }
-    
-    // public void addCourse(CourseNode n){
-    //     courseNodes[currentSize] = n;
-    //     currentSize++;
-    // }
-
-
-    // public void createImmediatePrereq(CourseNode[] prereqs){
-    //     CourseNode course = prereqs[0];
-    //     CourseNode prereq = prereqs[1];
-    //     //int index = course.getArrayIndex();
-    //     this.list.get(course.getName()).add(prereq);
-    //     course.setPrereq(prereq);
-    //     immediatePrereq.add(prereq);
-    // }
 
     /**
      * Given an inputFile, for the respective course, add its corresponding prerequisite
